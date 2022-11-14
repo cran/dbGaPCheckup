@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+<meta name="date" content="2022-11-11" />
+
+<title>dbGaPCheckup Quick Start</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">dbGaPCheckup Quick Start</h1>
+<h4 class="author"><p>Lacey W. Heinsberg and Daniel E. Weeks</p></h4>
+<h4 class="date">November 11, 2022</h4>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#copyright-information" id="toc-copyright-information"><span class="toc-section-number">1</span>
+Copyright information</a></li>
+<li><a href="#installation" id="toc-installation"><span class="toc-section-number">2</span> Installation</a></li>
+<li><a href="#quick-start" id="toc-quick-start"><span class="toc-section-number">3</span> Quick start</a></li>
+<li><a href="#usage" id="toc-usage"><span class="toc-section-number">4</span> Usage</a></li>
+<li><a href="#example-usage" id="toc-example-usage"><span class="toc-section-number">5</span> Example usage</a>
+<ul>
+<li><a href="#load-the-dbgapcheckup-r-package" id="toc-load-the-dbgapcheckup-r-package"><span class="toc-section-number">5.1</span> Load the <code>dbGaPCheckup</code>
+R package</a></li>
+<li><a href="#read-in-your-subject-phenotype-data-into-ds.data." id="toc-read-in-your-subject-phenotype-data-into-ds.data."><span class="toc-section-number">5.2</span> Read in your Subject Phenotype
+data into <code>DS.data</code>.</a></li>
+<li><a href="#read-in-your-subject-phenotype-data-dictionary-into-dd.dict." id="toc-read-in-your-subject-phenotype-data-dictionary-into-dd.dict."><span class="toc-section-number">5.3</span> Read in your Subject Phenotype
+data dictionary into <code>DD.dict</code>.</a></li>
+<li><a href="#run-the-function-check_report." id="toc-run-the-function-check_report."><span class="toc-section-number">5.4</span> Run the function
+<code>check_report</code>.</a></li>
+<li><a href="#reporting" id="toc-reporting"><span class="toc-section-number">5.5</span> Reporting</a></li>
+</ul></li>
+<li><a href="#labelled-data" id="toc-labelled-data"><span class="toc-section-number">6</span> Labelled data</a></li>
+<li><a href="#contact-information" id="toc-contact-information"><span class="toc-section-number">7</span> Contact information</a></li>
+<li><a href="#acknowledgments" id="toc-acknowledgments"><span class="toc-section-number">8</span> Acknowledgments</a></li>
+</ul>
+</div>
+
+<div id="copyright-information" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Copyright
+information</h1>
+<p>Copyright 2022, University of Pittsburgh. All Rights Reserved.
+License: <a href="https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html">GPL-2</a></p>
+</div>
+<div id="installation" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Installation</h1>
+<p>To install from <a href="https://cran.r-project.org/">CRAN</a>
+use:</p>
+<pre><code>install.packages(&quot;dbGaPCheckup&quot;)</code></pre>
+<p>To install the development version from <a href="https://github.com/">GitHub</a> use:</p>
+<pre><code>devtools::install_github(&quot;lwheinsberg/dbGaPCheckup/pkg&quot;)</code></pre>
+</div>
+<div id="quick-start" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Quick start</h1>
+<p>This document is designed to provide “quick start” guidance for using
+the <code>dbGaPCheckUp</code> R package. Please see the table below and
+<code>dbGaPCheckup_vignette</code> for more detailed information.</p>
+<table>
+<caption>List of function names and types.</caption>
+<colgroup>
+<col width="6%" />
+<col width="5%" />
+<col width="87%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Function_Name</th>
+<th align="left">Function_Type</th>
+<th align="left">Function_Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">field_check</td>
+<td align="left">check</td>
+<td align="left">Checks for dbGaP required fields: variable name
+(VARNAME), variable description (VARDESC), units (UNITS), and variable
+value and meaning (VALUES).</td>
+</tr>
+<tr class="even">
+<td align="left">pkg_field_check</td>
+<td align="left">check</td>
+<td align="left">Checks for package-level required fields: variable type
+(TYPE), minimum value (MIN), and maximum value (MAX).</td>
+</tr>
+<tr class="odd">
+<td align="left">dimension_check</td>
+<td align="left">check</td>
+<td align="left">Checks that the number of variables match between the
+data set and data dictionary.</td>
+</tr>
+<tr class="even">
+<td align="left">name_check</td>
+<td align="left">check</td>
+<td align="left">Checks that variable names match between the data set
+and data dictionary.</td>
+</tr>
+<tr class="odd">
+<td align="left">id_check</td>
+<td align="left">check</td>
+<td align="left">Checks that the first column of the data set is the
+primary ID for each participant labeled as SUBJECT_ID and that the
+values contain no spaces, padded zeros, or other illegal
+characters.</td>
+</tr>
+<tr class="even">
+<td align="left">row_check</td>
+<td align="left">check</td>
+<td align="left">Checks for empty or duplicate rows in the data
+set.</td>
+</tr>
+<tr class="odd">
+<td align="left">NA_check</td>
+<td align="left">check</td>
+<td align="left">Checks for NA values in the data set and, if NA values
+are present, also checks for an encoded NA value=meaning
+description.</td>
+</tr>
+<tr class="even">
+<td align="left">type_check</td>
+<td align="left">check</td>
+<td align="left">If a TYPE field exists, this function checks for any
+TYPE entries that aren’t allowable per dbGaP instructions.</td>
+</tr>
+<tr class="odd">
+<td align="left">values_check</td>
+<td align="left">check</td>
+<td align="left">Checks for potential errors in the VALUES columns by
+ensuring (1) required format of <code>VALUE=MEANING</code> (e.g., 0=No
+or 1=Yes); (2) no leading/trailing spaces near the equals sign (e.g.,
+0=No vs. 0 = No); (3) all variables of TYPE encoded have VALUES entries;
+and (4) all variables with VALUES entries are listed as TYPE
+encoded.</td>
+</tr>
+<tr class="even">
+<td align="left">integer_check</td>
+<td align="left">check</td>
+<td align="left">Checks for variables that appear to be incorrectly
+listed as TYPE integer.</td>
+</tr>
+<tr class="odd">
+<td align="left">decimal_check</td>
+<td align="left">check</td>
+<td align="left">Checks for variables that appear to be incorrectly
+listed as TYPE decimal.</td>
+</tr>
+<tr class="even">
+<td align="left">misc_format_check</td>
+<td align="left">check</td>
+<td align="left">Checks miscellaneous dbGaP formatting requirements to
+ensure (1) no duplicate variable names; (2) variable names do not
+contain “dbgap”; (3) there are no duplicate column names in the
+dictionary; and (4) column names falling after VALUES column are
+unnamed.</td>
+</tr>
+<tr class="odd">
+<td align="left">description_check</td>
+<td align="left">check</td>
+<td align="left">Checks for unique and non-missing descriptions
+(VARDESC) for every variable in the data dictionary.</td>
+</tr>
+<tr class="even">
+<td align="left">minmax_check</td>
+<td align="left">check</td>
+<td align="left">Checks for variables that have values exceeding the
+listed MIN or MAX.</td>
+</tr>
+<tr class="odd">
+<td align="left">missing_value_check</td>
+<td align="left">check</td>
+<td align="left">Checks for variables that have non-encoded missing
+value codes.</td>
+</tr>
+<tr class="even">
+<td align="left">complete_check</td>
+<td align="left">bulk check</td>
+<td align="left">Runs the entire workflow (field_check, pkg_field_check,
+dimension_check, name_check, id_check, row_check, NA_check, type_check,
+values_check, integer_check, decimal_check, misc_format_check,
+description_check, minmax_check, and missing_value_check).</td>
+</tr>
+<tr class="odd">
+<td align="left">add_missing_fields</td>
+<td align="left">utility</td>
+<td align="left">Adds additional fields required by this package
+including variable type (‘TYPE’), minimum value (‘MIN’), and maximum
+value (‘MAX’).</td>
+</tr>
+<tr class="even">
+<td align="left">name_correct</td>
+<td align="left">utility</td>
+<td align="left">Updates the data dictionary so variable names match
+those listed in the data set.</td>
+</tr>
+<tr class="odd">
+<td align="left">reorder_dictionary</td>
+<td align="left">utility</td>
+<td align="left">Reorders the data dictionary to match the data
+set.</td>
+</tr>
+<tr class="even">
+<td align="left">reorder_data</td>
+<td align="left">utility</td>
+<td align="left">Reorders the data set to match the data
+dictionary.</td>
+</tr>
+<tr class="odd">
+<td align="left">id_first_data</td>
+<td align="left">utility</td>
+<td align="left">Reorders the data set so that SUBJECT_ID comes
+first.</td>
+</tr>
+<tr class="even">
+<td align="left">id_first_dict</td>
+<td align="left">utility</td>
+<td align="left">Reorders the data dictionary so that SUBJECT_ID comes
+first.</td>
+</tr>
+<tr class="odd">
+<td align="left">label_data</td>
+<td align="left">utility, awareness</td>
+<td align="left">Adds non-missing information from the data dictionary
+as attributes to the data.</td>
+</tr>
+<tr class="even">
+<td align="left">value_meaning_table</td>
+<td align="left">utility, awareness</td>
+<td align="left">Generates a value-meaning table by parsing the VALUES
+fields.</td>
+</tr>
+<tr class="odd">
+<td align="left">missingness_summary</td>
+<td align="left">awareness</td>
+<td align="left">Summarizes the amount of missingness in the data
+set.</td>
+</tr>
+<tr class="even">
+<td align="left">value_missing_table</td>
+<td align="left">awareness</td>
+<td align="left">Checks for consistent usage of encoded values and
+missing value codes between the data dictionary and the data set.</td>
+</tr>
+<tr class="odd">
+<td align="left">dictionary_search</td>
+<td align="left">awareness</td>
+<td align="left">Facilitates searches of the data dictionary.</td>
+</tr>
+<tr class="even">
+<td align="left">check_report</td>
+<td align="left">bulk check, reporting</td>
+<td align="left">Generates a user-readable report of the checks run by
+the complete_check function.</td>
+</tr>
+<tr class="odd">
+<td align="left">create_report</td>
+<td align="left">reporting, awareness</td>
+<td align="left">Generates a textual and graphical report of the
+selected variables in HTML format.</td>
+</tr>
+<tr class="even">
+<td align="left">create_awareness_report</td>
+<td align="left">reporting, awareness</td>
+<td align="left">Generates an awareness report, calling
+missingness_summary and value_missing_table functions.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="usage" class="section level1" number="4">
+<h1><span class="header-section-number">4</span> Usage</h1>
+<p>After the <code>dbGaPCheckup</code> package has been installed, you
+can load the R package using this command:</p>
+<p><code>library(dbGaPCheckup)</code></p>
+<p>Then proceed as follows:</p>
+<ol style="list-style-type: decimal">
+<li>Read in your data into <code>DS.data</code>;</li>
+<li>Read in your data dictionary into <code>DD.dict</code>;</li>
+<li>Run the function <code>check_report</code>, optionally defining any
+missing value codes (e.g., -9999) via the
+<code>non.NA.missing.codes</code> argument.</li>
+</ol>
+<p>Note, as you will see below, this package requires several fields
+beyond those required by the dbGaP <a href="https://www.ncbi.nlm.nih.gov/gap/docs/submissionguide/">formatting
+requirements</a>. Specifically, the data dictionary is required to also
+have <code>MIN</code>, <code>MAX</code>, and <code>TYPE</code> fields.
+If your data dictionary does not include these fields already, you can
+use the <code>add_missing_fields</code> function to auto fill them (see
+below).</p>
+</div>
+<div id="example-usage" class="section level1" number="5">
+<h1><span class="header-section-number">5</span> Example usage</h1>
+<div id="load-the-dbgapcheckup-r-package" class="section level2" number="5.1">
+<h2><span class="header-section-number">5.1</span> Load the
+<code>dbGaPCheckup</code> R package</h2>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dbGaPCheckup)</span></code></pre></div>
+</div>
+<div id="read-in-your-subject-phenotype-data-into-ds.data." class="section level2" number="5.2">
+<h2><span class="header-section-number">5.2</span> Read in your Subject
+Phenotype data into <code>DS.data</code>.</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>DS.path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;DS_Example.txt&quot;</span>,</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>   <span class="at">package =</span> <span class="st">&quot;dbGaPCheckup&quot;</span>, <span class="at">mustWork=</span><span class="cn">TRUE</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>DS.data <span class="ot">&lt;-</span> <span class="fu">read.table</span>(DS.path, <span class="at">header=</span><span class="cn">TRUE</span>, <span class="at">sep=</span><span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span>, <span class="at">quote=</span><span class="st">&quot;&quot;</span>, <span class="at">as.is =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+</div>
+<div id="read-in-your-subject-phenotype-data-dictionary-into-dd.dict." class="section level2" number="5.3">
+<h2><span class="header-section-number">5.3</span> Read in your Subject
+Phenotype data dictionary into <code>DD.dict</code>.</h2>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>DD.path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;3b_SSM_DD_Example2f.xlsx&quot;</span>,</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>   <span class="at">package =</span> <span class="st">&quot;dbGaPCheckup&quot;</span>, <span class="at">mustWork=</span><span class="cn">TRUE</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>DD.dict <span class="ot">&lt;-</span> readxl<span class="sc">::</span><span class="fu">read_xlsx</span>(DD.path)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; New names:</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; • `` -&gt; `...15`</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; • `` -&gt; `...16`</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; • `` -&gt; `...17`</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; • `` -&gt; `...18`</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; • `` -&gt; `...19`</span></span></code></pre></div>
+</div>
+<div id="run-the-function-check_report." class="section level2" number="5.4">
+<h2><span class="header-section-number">5.4</span> Run the function
+<code>check_report</code>.</h2>
+<p>With many functions, specification of missing value codes are
+important for accurate results.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>report <span class="ot">&lt;-</span> <span class="fu">check_report</span>(<span class="at">DD.dict =</span> DD.dict, <span class="at">DS.data =</span> DS.data, <span class="at">non.NA.missing.codes=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">4444</span>, <span class="sc">-</span><span class="dv">9999</span>))</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 15 × 3</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    Function            Status        Message                                    </span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    &lt;chr&gt;               &lt;chr&gt;         &lt;chr&gt;                                      </span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  1 field_check         Passed        Passed: required fields VARNAME, VARDESC, …</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  2 pkg_field_check     Failed        ERROR: not all package-level required fiel…</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  3 dimension_check     Passed        Passed: the variable count matches between…</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  4 name_check          Passed        Passed: the variable names match between t…</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  5 id_check            Passed        Passed: All ID variable checks passed.     </span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  6 row_check           Passed        Passed: no blank or duplicate rows detecte…</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  7 NA_check            Not attempted ERROR: Required pre-check pkg_field_check …</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  8 type_check          Failed        ERROR: TYPE column not found. Consider usi…</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  9 values_check        Not attempted ERROR: Required pre-check type_check faile…</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10 integer_check       Not attempted ERROR: Required pre-check pkg_field_check …</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 11 decimal_check       Not attempted ERROR: Required pre-check pkg_field_check …</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 12 misc_format_check   Passed        Passed: no check-specific formatting issue…</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 13 description_check   Failed        ERROR: missing and duplicate descriptions …</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 14 minmax_check        Not attempted ERROR: Required pre-check pkg_field_check …</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 15 missing_value_check Not attempted ERROR: Required pre-check pkg_field_check …</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; --------------------</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; pkg_field_check: Failed </span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ERROR: not all package-level required fields are present in the data dictionary. Consider using the add_missing_fields function to auto fill these fields. </span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $pkg_field_check.Info</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  TYPE   MIN   MAX </span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; FALSE FALSE FALSE </span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; --------------------</span></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; type_check: Failed </span></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ERROR: TYPE column not found. Consider using the add_missing_fields function to autofill TYPE. </span></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $type_check.Info</span></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;ERROR: TYPE column not found.&quot;</span></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; --------------------</span></span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; description_check: Failed </span></span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ERROR: missing and duplicate descriptions found in data dictionary. </span></span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $description_check.Info</span></span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 × 2</span></span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   VARNAME  VARDESC              </span></span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;    &lt;chr&gt;                </span></span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 PREGNANT &lt;NA&gt;                 </span></span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 REACT    &lt;NA&gt;                 </span></span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 HEIGHT   Height of participant</span></span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 WEIGHT   Height of participant</span></span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; --------------------</span></span></code></pre></div>
+<p>As described in more detail in the <code>dbGaPCheckup_vignette</code>
+vignette, some checks contain embedded “pre-checks” that must be passed
+before the check can be run. For example, As mentioned above, this
+package requires <code>MIN</code>, <code>MAX</code>, and
+<code>TYPE</code> fields in the data dictionary. We have created a
+function to auto fill these fields that can be used to get further along
+in the checks.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>DD.dict.updated <span class="ot">&lt;-</span> <span class="fu">add_missing_fields</span>(DD.dict, DS.data)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $Message</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;CORRECTED ERROR: not all package-level required fields were present in the data dictionary. The missing fields have now been added! TYPE was inferred from the data, and MIN/MAX have been added as empty fields.&quot;</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $Missing</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;TYPE&quot; &quot;MIN&quot;  &quot;MAX&quot;</span></span></code></pre></div>
+<p>Once the fields are added, you can return to run your checks.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>report.v2 <span class="ot">&lt;-</span> <span class="fu">check_report</span>(<span class="at">DD.dict =</span> DD.dict.updated , <span class="at">DS.data =</span> DS.data, <span class="at">non.NA.missing.codes=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">4444</span>, <span class="sc">-</span><span class="dv">9999</span>))</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 15 × 3</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    Function            Status Message                                           </span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    &lt;chr&gt;               &lt;chr&gt;  &lt;chr&gt;                                             </span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  1 field_check         Passed Passed: required fields VARNAME, VARDESC, UNITS, …</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  2 pkg_field_check     Passed Passed: package-level required fields TYPE, MIN, …</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  3 dimension_check     Passed Passed: the variable count matches between the da…</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  4 name_check          Passed Passed: the variable names match between the data…</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  5 id_check            Passed Passed: All ID variable checks passed.            </span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  6 row_check           Passed Passed: no blank or duplicate rows detected.      </span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  7 NA_check            Passed Passed: no NA values detected in data set.        </span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  8 type_check          Passed Passed: All TYPE entries found are accepted by db…</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  9 values_check        Passed Passed: all four VALUES checks look good.         </span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10 integer_check       Passed Passed: all variables listed as TYPE integer appe…</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 11 decimal_check       Passed Passed: all variables listed as TYPE decimal appe…</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 12 misc_format_check   Passed Passed: no check-specific formatting issues ident…</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 13 description_check   Failed ERROR: missing and duplicate descriptions found i…</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 14 minmax_check        Passed Passed: when provided, all variables are within t…</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 15 missing_value_check Failed ERROR: some variables have non-encoded missing va…</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; --------------------</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; description_check: Failed </span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ERROR: missing and duplicate descriptions found in data dictionary. </span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $description_check.Info</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 × 2</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   VARNAME  VARDESC              </span></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;    &lt;chr&gt;                </span></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 PREGNANT &lt;NA&gt;                 </span></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 REACT    &lt;NA&gt;                 </span></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 HEIGHT   Height of participant</span></span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 WEIGHT   Height of participant</span></span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; --------------------</span></span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; missing_value_check: Failed </span></span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ERROR: some variables have non-encoded missing value codes. </span></span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $missing_value_check.Info</span></span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     VARNAME VALUE MEANING  PASS</span></span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 16 CUFFSIZE -9999    &lt;NA&gt; FALSE</span></span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; --------------------</span></span></code></pre></div>
+<p>Now we see that 13 out of 15 checks pass, but the workflow fails at
+<code>description_check</code> and <code>missing_value_check</code>.
+Specifically, in <code>description_check</code> we see that variables
+<code>PREGNANT</code> and <code>REACT</code> were identified as having
+missing variable descriptions (<code>VARDESC</code>), and variables
+<code>HEIGHT</code> and <code>WEIGHT</code> incorrectly have identical
+descriptions. In <code>missing_value_check</code>, we see that the
+variable <code>CUFFSIZE</code> contains a <code>-9999</code> encoded
+value that is not specified in a <code>VALUES</code> column. While we
+have included functions that support “simple fixes”, the issues
+identified here would need to be corrected manually in your data
+dictionary before moving on.</p>
+</div>
+<div id="reporting" class="section level2" number="5.5">
+<h2><span class="header-section-number">5.5</span> Reporting</h2>
+<p>Note that we have also created reporting functions that generate
+graphical and textual descriptions and awareness checks of the data in
+HTML format (see <code>dbGaPCheckup_vignette</code> vignette:
+<code>create_awareness_report</code> (Appendix A) and
+<code>create_report</code> (Appendix B) for more details). These reports
+are designed to help you catch other potential errors in your data set.
+Note that the <code>create_report</code> generated is quite long
+however, so we recommend that you only submit subsets of variables at a
+time. Specification of missing value codes are also important for
+effective plotting.</p>
+<pre><code># Functions not run here as they work best when initiated interactively
+# Awareness Report (See Appendix A of the `dbGaPCheckup` vignette)
+create_awareness_report(DD.dict.updated, DS.data, non.NA.missing.codes=c(-9999, -4444),
+   output.path= tempdir())
+   
+# Data Report (See Appendix B of the `dbGaPCheckup` vignette)
+create_report(DD.dict.updated, DS.data, sex.split=TRUE, sex.name= &quot;SEX&quot;,
+   start = 3, end = 7, non.NA.missing.codes=c(-9999,-4444),
+   output.path= tempdir(), open.html=TRUE)</code></pre>
+<p>More details on execution and interpretation have been provided in
+the <code>dbGaPCheckup_vignette</code> vignette.</p>
+</div>
+</div>
+<div id="labelled-data" class="section level1" number="6">
+<h1><span class="header-section-number">6</span> Labelled data</h1>
+<p>After your data dictionary is fully consistent with your data, you
+can use the <code>label_data</code> function to convert your data to
+labelled data, essentially embedding the data dictionary into the data
+for future use!</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>DS_labelled_data <span class="ot">&lt;-</span> <span class="fu">label_data</span>(DD.dict.updated, DS.data, <span class="at">non.NA.missing.codes=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">9999</span>))</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>labelled<span class="sc">::</span><span class="fu">var_label</span>(DS_labelled_data<span class="sc">$</span>SEX)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Sex assigned at birth&quot;</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>labelled<span class="sc">::</span><span class="fu">val_labels</span>(DS_labelled_data<span class="sc">$</span>SEX)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   male female </span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;      0      1</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="fu">attributes</span>(DS_labelled_data<span class="sc">$</span>SEX)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $labels</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   male female </span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;      0      1 </span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $label</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Sex assigned at birth&quot;</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $class</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;haven_labelled&quot; &quot;vctrs_vctr&quot;     &quot;integer&quot;       </span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $TYPE</span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;integer, encoded value&quot;</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>labelled<span class="sc">::</span><span class="fu">na_values</span>(DS_labelled_data<span class="sc">$</span>HX_DEPRESSION)</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; missing value </span></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         -9999</span></span></code></pre></div>
+</div>
+<div id="contact-information" class="section level1" number="7">
+<h1><span class="header-section-number">7</span> Contact
+information</h1>
+<p>If you have any questions or comments, please feel free to contact
+us!</p>
+<p>Lacey W. Heinsberg: <a href="mailto:law145@pitt.edu" class="email">law145@pitt.edu</a><br />
+Daniel E. Weeks: <a href="mailto:weeks@pitt.edu" class="email">weeks@pitt.edu</a></p>
+<p>Bug reports: <a href="https://github.com/lwheinsberg/dbGaPCheckup/issues" class="uri">https://github.com/lwheinsberg/dbGaPCheckup/issues</a></p>
+</div>
+<div id="acknowledgments" class="section level1" number="8">
+<h1><span class="header-section-number">8</span> Acknowledgments</h1>
+<p>This package was developed with partial support from the National
+Institutes of Health under award numbers R01HL093093, R01HL133040, and
+K99HD107030. The <code>eval_function</code> and
+<code>dat_function</code> functions that form the backbone of the
+awareness reports were inspired by an elegant 2016 homework answer
+submitted by Tanbin Rahman in our HUGEN 2070 course ‘Bioinformatics for
+Human Genetics’. We would also like to thank Nick Moshgat for testing
+and providing feedback on our package during development.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
