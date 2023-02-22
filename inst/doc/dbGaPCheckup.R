@@ -19,7 +19,7 @@ DS.path <- system.file("extdata", "DS_Example.txt",
 DS.data <- read.table(DS.path, header=TRUE, sep="\t", quote="", as.is = TRUE)
 
 ## ----dict---------------------------------------------------------------------
-DD.path <- system.file("extdata", "3b_SSM_DD_Example2f.xlsx",
+DD.path <- system.file("extdata", "DD_Example2f.xlsx",
    package = "dbGaPCheckup", mustWork=TRUE)
 DD.dict <- readxl::read_xlsx(DD.path)
 

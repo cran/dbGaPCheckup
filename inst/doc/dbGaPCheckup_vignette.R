@@ -23,7 +23,7 @@ DS.data <- read.table(DS.path, header=TRUE, sep="\t",
 knitr::kable(DS.data[1:6,], caption="First six lines of an example dbGaP data set.") 
 
 ## ----dd, echo=FALSE, message=FALSE--------------------------------------------
-DD.path <- system.file("extdata", "3b_SSM_DD_Example1.xlsx",
+DD.path <- system.file("extdata", "DD_Example1.xlsx",
    package = "dbGaPCheckup", mustWork=TRUE)
 DD.dict <- readxl::read_xlsx(DD.path)
 
@@ -44,7 +44,9 @@ e1_report$Information$pkg_field_check.Info
 DD.dict_updated <- add_missing_fields(DD.dict.D, DS.data.D)
 
 ## ----cr2----------------------------------------------------------------------
-e1_report.v2 <- check_report(DD.dict_updated, DS.data.D, non.NA.missing.codes=c(-4444, -9999)) # Note! Don't forget to call in the updated version of the data dictionary here! 
+# Note! Don't forget to call in the updated version of the data dictionary here! 
+e1_report.v2 <- check_report(DD.dict_updated, DS.data.D, 
+                non.NA.missing.codes=c(-4444, -9999)) 
 
 ## ----data2, message=FALSE-----------------------------------------------------
 data(ExampleL)
@@ -62,7 +64,9 @@ name_check(DD.dict.L, DS.data.L) # failed
 DS.data_updated <- name_correct(DD.dict.L, DS.data.L)
 
 ## ----cr4----------------------------------------------------------------------
-e2_report.v2 <- check_report(DD.dict.L, DS.data_updated, non.NA.missing.codes=c(-4444, -9999)) # Calling in updated data set
+# Calling in updated data set
+e2_report.v2 <- check_report(DD.dict.L, DS.data_updated,
+              non.NA.missing.codes=c(-4444, -9999)) 
 
 ## ----data3, message=FALSE-----------------------------------------------------
 data(ExampleB)
@@ -95,6 +99,19 @@ dictionary_search(DD.dict.H, search.term=c("skinfold"))
 table(DS.data.H$ABD_SKF)
 
 ## ----data5, message=FALSE-----------------------------------------------------
+data(ExampleN)
+
+## ----cr8----------------------------------------------------------------------
+d5_report <- check_report(DD.dict.N, DS.data.N)
+
+## ----reorder_dict-------------------------------------------------------------
+DD.dict_updated <- reorder_dictionary(DD.dict.N, DS.data.N)
+
+## ----nc-----------------------------------------------------------------------
+# Remember to call in the updated data dictionary!
+name_check(DD.dict_updated, DS.data.N)
+
+## ----data6, message=FALSE-----------------------------------------------------
 data(ExampleA)
 
 ## ----id_check-----------------------------------------------------------------
@@ -104,7 +121,7 @@ id_check(DS.data.A)
 misc_format_check(DD.dict.A, DS.data.A) 
 
 ## ----row_check----------------------------------------------------------------
-row_check(DS.data.A)
+row_check(DD.dict.A, DS.data.A)
 
 ## ----NA_check-----------------------------------------------------------------
 NA_check(DD.dict.A, DS.data.A)
@@ -187,6 +204,6 @@ for (value in na.omit(non.NA.missing.codes)) {
     mutate(across(everything(), ~na_if(.x, value)))
 }
 
-## ----applyfun, results="asis"-------------------------------------------------
+## ----applyfun, results="asis", warning=FALSE----------------------------------
 dat_function_selected(DS.data.B, DD.dict.B, sex.split = TRUE, sex.name = "SEX", start = 3, end = 6, dataset.na=dataset.na, h.level=4)
 
