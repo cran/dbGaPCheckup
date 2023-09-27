@@ -1,0 +1,32 @@
+citHeader("To cite dbGaPCheckup in publications use:")
+
+note <- sprintf("R package version %s", meta$Version)
+
+## Software announcment paper 
+bibentry(
+  bibtype     = "Article",
+  title    = "dbGaPCheckup: pre-submission checks of dbGaP-formatted subject phenotype files",
+  author   = c(as.person("Lacey W. Heinsberg"), as.person("Daniel E. Weeks")),
+  journal  = "BMC Bioinformatics",
+  year     = "2023",
+  volume   = "24",
+  number   = "77",
+  pubMed   = "36869285", 
+  url      = "https://doi.org/10.1186/s12859-023-05200-8",
+  textVersion = paste("Heinsberg LW, Weeks DE (2023).", 
+  "dbGaPCheckup: pre-submission checks of dbGaP-formatted subject phenotype files.", 
+  "BMC Bioinformatics, 24, 77.",
+      "URL https://doi.org/10.1186/s12859-023-05200-8.", 
+   "PubMed PMID: 36869285; PubMed Central PMCID: PMC9985192." 
+  )
+)
+
+## R package reference generated from DESCRIPTION metadata
+bibentry(bibtype="Manual",
+         title = "dbGaPCheckup",
+	 author= c(as.person("Lacey W. Heinsberg"), as.person("Daniel E. Weeks")),
+	 year = 2023,
+	 note = note,
+ 	 url="https://CRAN.R-project.org/package=dbGaPCheckup",
+	 key= "dbgapcheckup"
+	 )
